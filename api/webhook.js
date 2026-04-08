@@ -34,7 +34,10 @@ module.exports = async function handler(req, res) {
       console.log('WebSub verification received');
       return res.status(200).send(challenge);
     }
-    return res.status(400).send('Missing challenge');
+    return res.status(200).json({
+      status: 'Webhook activo y esperando notificaciones de YouTube',
+      channel: process.env.CHANNEL_ID,
+    });
   }
 
   // POST = New video notification from YouTube
