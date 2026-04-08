@@ -6,9 +6,7 @@ module.exports = async function handler(req, res) {
   }
 
   const channelId = process.env.CHANNEL_ID;
-  const vercelUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.BASE_URL;
+  const vercelUrl = process.env.BASE_URL;
 
   const callbackUrl = `${vercelUrl}/api/webhook`;
   const topicUrl = `https://www.youtube.com/xml/feeds/videos.xml?channel_id=${channelId}`;
