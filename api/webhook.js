@@ -14,7 +14,9 @@ async function getBlob(pathname) {
   const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
   const { blobs } = await list({ prefix: pathname, token: blobToken });
   if (blobs.length === 0) return null;
-  const response = await fetch(blobs[0].downloadUrl);
+  const response = await fetch(blobs[0].url, {
+    headers: { Authorization: `Bearer ${blobToken}` },
+  });
   return response.json();
 }
 
