@@ -1,0 +1,5 @@
+node_modules/
+.env
+tokens.json
+last_video.json
+.vercel

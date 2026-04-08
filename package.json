@@ -1,0 +1,10 @@
+{
+  "name": "first-commit",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "dependencies": {
+    "@vercel/blob": "^2.3.3",
+    "googleapis": "^171.4.0"
+  }
+}
