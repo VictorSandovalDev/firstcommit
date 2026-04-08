@@ -23,6 +23,7 @@ async function saveBlob(pathname, data) {
   await put(pathname, JSON.stringify(data), {
     access: 'private',
     addRandomSuffix: false,
+    allowOverwrite: true,
     token: process.env.BLOB_READ_WRITE_TOKEN,
   });
 }

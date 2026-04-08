@@ -27,6 +27,7 @@ module.exports = async function handler(req, res) {
     await put('youtube-tokens.json', JSON.stringify(tokens), {
       access: 'private',
       addRandomSuffix: false,
+      allowOverwrite: true,
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
 
