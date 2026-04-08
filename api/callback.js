@@ -10,25 +10,34 @@ function getOAuth2Client() {
 }
 
 module.exports = async function handler(req, res) {
-  const { code } = req.query;
+  try {
+    const { code } = req.query;
 
-  if (!code) {
-    return res.status(400).json({ error: 'No authorization code provided' });
+    if (!code) {
+      return res.status(400).json({ error: 'No authorization code provided' });
+    }
+
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return res.status(500).json({ error: 'BLOB_READ_WRITE_TOKEN no esta configurado' });
+    }
+
+    const oauth2Client = getOAuth2Client();
+    const { tokens } = await oauth2Client.getToken(code);
+
+    await put('youtube-tokens.json', JSON.stringify(tokens), {
+      access: 'private',
+      addRandomSuffix: false,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
+
+    res.status(200).json({
+      message: 'Autorizacion exitosa! Los tokens se guardaron correctamente.',
+      hint: 'El cron job revisara automaticamente por nuevos videos.',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Error en callback',
+      details: error.message,
+    });
   }
-
-  const oauth2Client = getOAuth2Client();
-
-  const { tokens } = await oauth2Client.getToken(code);
-
-  // Store tokens in Vercel Blob
-  await put('youtube-tokens.json', JSON.stringify(tokens), {
-    access: 'private',
-    addRandomSuffix: false,
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-  });
-
-  res.status(200).json({
-    message: 'Autorizacion exitosa! Los tokens se guardaron correctamente.',
-    hint: 'El cron job revisara automaticamente por nuevos videos.',
-  });
 };
